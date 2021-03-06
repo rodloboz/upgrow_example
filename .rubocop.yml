@@ -1,0 +1,135 @@
+require:
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+
+# Max line length is changed from default 80
+Layout/LineLength:
+  Max: 120
+  IgnoredPatterns: ['(\A|\s)#']
+  Exclude:
+    - 'config/**/*.rb'
+
+# Max class definition is changed from default 100
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/MethodLength:
+  Max: 20
+
+# Exclude block length maximum on specs
+Metrics/BlockLength:
+  Exclude:
+    - 'config/**/*.rb'
+    - 'Rakefile'
+    - '**/*.rake'
+    - 'spec/**/*.rb'
+
+Naming/AccessorMethodName:
+  Exclude:
+    - 'app/helpers/*.rb'
+
+# Class top level documentation
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  AutoCorrect: true
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/EvalWithLocation:
+  Enabled: false
+
+Style/StructInheritance:
+  Enabled: false
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+# assignment branch condition size
+Metrics/AbcSize:
+  Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - staging
+    - development
+    - test
+
+Rails/FilePath:
+  EnforcedStyle: slashes
+
+Rails/DynamicFindBy:
+  Enabled: false
+
+RSpec/HookArgument:
+  Enabled: false
+
+RSpec/NamedSubject:
+    Enabled: false
+
+RSpec/ExampleLength:
+  Max: 15
+  Exclude:
+    - spec/features/*
+
+RSpec/DescribeClass:
+  Exclude:
+    - spec/features/*
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/FilePath:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 8
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+Style/ModuleFunction:
+  Enabled: false
+
+Style/RescueStandardError:
+  Enabled: false
+
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/GlobalVars:
+  AllowedVariables:
+    - '$redis'
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.7.1
+  Exclude:
+    - 'vendor/**/*'
+    - 'db/migrate/**/*'
+    - 'db/schema.rb'
+    - 'db/seeds.rb'
+    - 'db/seeds/**/*'
+    - 'bin/**/*'
+    - 'node_modules/**/*'
+    - 'tmp/*'

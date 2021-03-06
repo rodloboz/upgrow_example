@@ -1,0 +1,18 @@
+defaults: &default
+    adapter: postgresql
+    encoding: utf8
+    pool: <%= ENV['DB_POOL'] || ENV['RAILS_MAX_THREADS'] || 15 %>
+
+development:
+    <<: *default
+    database: upgrow_example_development
+
+test:
+  <<: *default
+  database: upgrow_example_test
+
+production:
+  <<: *default
+  database: upgrow_example_production
+  username: upgrow_example
+  password: <%= ENV['UPGROW_EXAMPLE_DATABASE_PASSWORD'] %>
