@@ -19,9 +19,9 @@ RSpec.describe PostsRepository, type: :repository do
       expect(posts.count).to eq(2)
     end
 
-    it 'instanciates the correct post models' do
+    it 'instanciates the correct post records' do
       posts = repository.all
-      expect(posts).to all be_a(Post)
+      expect(posts).to all be_a(PostRecord)
       expect(posts[0].title).to eq('Abc')
       expect(posts[0].body).to eq('123')
       expect(posts[1].title).to eq('Xyz')

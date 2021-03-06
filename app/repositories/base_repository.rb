@@ -27,8 +27,8 @@ class BaseRepository
     record_class.all.map { |record| to_model(record.attributes) }
   end
 
-  def create(**args)
-    record = record_class.create!(args)
+  def create(input)
+    record = record_class.create!(input.attributes)
     to_model(record.attributes)
   end
 
@@ -37,9 +37,9 @@ class BaseRepository
     to_model(record.attributes)
   end
 
-  def update(id, **args)
+  def update(id, input)
     record = record_class.find(id)
-    record.update!(args)
+    record.update!(input.attributes)
     to_model(record.attributes)
   end
 

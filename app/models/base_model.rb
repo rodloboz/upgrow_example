@@ -10,4 +10,8 @@ class BaseModel < ImmutableObject
 
     super
   end
+
+  def to_param
+    id.to_s
+  end
 end
