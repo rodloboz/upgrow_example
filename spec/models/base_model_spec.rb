@@ -10,11 +10,11 @@ RSpec.describe BaseModel do
     end
   end
 
-  it '#attribute_names includes :id, :created_at, and :updated_at' do
+  it '.attribute_names includes :id, :created_at, and :updated_at' do
     expect(sample_model.attribute_names).to include(:id, :created_at, :updated_at)
   end
 
-  it '#new requires all attributes' do
+  it '.new requires all attributes' do
     expect do
       sample_model.new(
         sample_abc: 'abc', id: 1, created_at: Time.zone.now, updated_at: Time.zone.now

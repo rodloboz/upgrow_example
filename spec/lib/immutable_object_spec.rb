@@ -9,48 +9,53 @@ RSpec.describe ImmutableObject do
       attribute :sample_xyz
     end
   end
+
   let(:subsample_class) do
     Class.new(sample_class) do
       attribute :subsample_abc
     end
   end
 
-  it '#attribute_names is empty by default' do
-    expect(described_class.attribute_names).to be_empty
+  describe '.attribute_names' do
+    it 'is empty by default' do
+      expect(described_class.attribute_names).to be_empty
+    end
+
+    it 'returns a list of attribute names' do
+      expect(subsample_class.attribute_names).to contain_exactly(:sample_abc, :sample_xyz, :subsample_abc)
+    end
   end
 
-  it '#attribute_names returns a list of attribute names' do
-    expect(subsample_class.attribute_names).to contain_exactly(:sample_abc, :sample_xyz, :subsample_abc)
-  end
+  describe '.new' do
+    it 'creates a frozen instance with the given attributes' do
+      sample = sample_class.new(sample_abc: 'abc', sample_xyz: 'xyz')
 
-  it '#new creates a frozen instance with the given attributes' do
-    sample = sample_class.new(sample_abc: 'abc', sample_xyz: 'xyz')
+      expect(sample.sample_abc).to eq('abc')
+      expect(sample.sample_xyz).to eq('xyz')
+      expect(sample).to be_frozen
+    end
 
-    expect(sample.sample_abc).to eq('abc')
-    expect(sample.sample_xyz).to eq('xyz')
-    expect(sample).to be_frozen
-  end
+    it 'does not allow attributes to be mutated' do
+      sample = sample_class.new(sample_abc: 'abc', sample_xyz: 'xyz')
 
-  it 'does not allow attributes to be mutated' do
-    sample = sample_class.new(sample_abc: 'abc', sample_xyz: 'xyz')
+      expect(sample.sample_abc).not_to respond_to(:sample_abc=)
+      expect(sample.sample_xyz).not_to respond_to(:sample_xy=)
+    end
 
-    expect(sample.sample_abc).not_to respond_to(:sample_abc=)
-    expect(sample.sample_xyz).not_to respond_to(:sample_xy=)
-  end
+    it 'rejects attributes that do not exist' do
+      expect do
+        sample_class.new(sample_abc: 'abc', sample_xyz: 'xyz', fake: 'error')
+      end.to raise_error(ArgumentError).with_message('Unknown attribute [:fake]')
+    end
 
-  it '#new rejects attributes that do not exist' do
-    expect do
-      sample_class.new(sample_abc: 'abc', sample_xyz: 'xyz', fake: 'error')
-    end.to raise_error(ArgumentError).with_message('Unknown attribute [:fake]')
-  end
+    it 'adds inherited attributes' do
+      subsample = subsample_class.new(
+        sample_abc: 'abc', sample_xyz: 'xyz', subsample_abc: 'sub_abc'
+      )
 
-  it '#new adds inherited attributes' do
-    subsample = subsample_class.new(
-      sample_abc: 'abc', sample_xyz: 'xyz', subsample_abc: 'sub_abc'
-    )
-
-    expect(subsample.sample_abc).to eq('abc')
-    expect(subsample.sample_xyz).to eq('xyz')
-    expect(subsample.subsample_abc).to eq('sub_abc')
+      expect(subsample.sample_abc).to eq('abc')
+      expect(subsample.sample_xyz).to eq('xyz')
+      expect(subsample.subsample_abc).to eq('sub_abc')
+    end
   end
 end

@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class PostsController < ApplicationController
   def index
-    @posts = PostsRepository.new.all
+    @posts = ListPostsAction.new.perform.posts
   end
 
   def show
-    @post = PostsRepository.new.find(params[:id])
+    @post = ShowPostAction.new.perform(params[:id]).post
   end
 
   def new
@@ -15,23 +17,24 @@ class PostsController < ApplicationController
     @input = PostInput.new(post_params)
 
     respond_to do |format|
-      if @input.valid?
-        post = PostsRepository.new.create(@input)
-        format.html { redirect_to post_path(post), notice: 'Post was successfully created.' }
-        format.json { render :show, status: :created }
-      else
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(@input, partial: 'posts/form',
-                                                            locals: { input: @input })
+      Posts::CreatePostAction.new.perform(@input)
+        .and_then do |post:|
+          format.html { redirect_to post_path(post), notice: 'Post was successfully created.' }
+          format.json { render :show, status: :created }
         end
-        format.html { render :new }
-        format.json { render json: @input.errors, status: :unprocessable_entity }
-      end
+        .or_else do |errors|
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace(@input, partial: 'posts/form',
+                                                              locals: { input: @input })
+          end
+          format.html { render :new }
+          format.json { render json: errors, status: :unprocessable_entity }
+        end
     end
   end
 
   def edit
-    @post = PostsRepository.new.find(params[:id])
+    @post = Posts::EditPostAction.new.peform(params[:id]).post
     @input = PostInput.new(title: @post.title, body: @post.body)
   end
 
