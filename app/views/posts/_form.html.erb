@@ -1,6 +1,6 @@
 <%= form_with model: input,
               id: dom_id(input),
-              url: url,
+              url: local_assigns[:url],
               method: local_assigns[:method] || :post do |form| %>
  <% if input.errors.present? %>
    <div id="error_explanation">

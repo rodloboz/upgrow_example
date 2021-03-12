@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module Posts
-  class ListPostsActions < BaseAction
+  class ListPostsAction < BaseAction
     result :posts
 
     def perform
-      result.success(posts: PostRepository.new.all)
+      result.success(posts: PostsRepository.new.all)
     end
   end
 end

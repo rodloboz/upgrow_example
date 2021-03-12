@@ -3,7 +3,7 @@
 module Posts
   class DeletePostAction < BaseAction
     def perform(id)
-      PostRepository.new.delete(id)
+      PostsRepository.new.delete(id)
       result.success
     end
   end

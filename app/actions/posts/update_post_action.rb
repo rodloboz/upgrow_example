@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Posts
-  class CreatePostAction < BaseAction
+  class UpdatePostAction < BaseAction
     result :post
 
-    def perform(input)
+    def perform(id, input)
       if input.valid?
-        post = PostsRepository.new.create(input)
+        post = PostsRepository.new.update(id, input)
         result.success(post: post)
       else
         result.failure(input.errors)
